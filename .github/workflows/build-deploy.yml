@@ -1,0 +1,88 @@
+# name: Build and Push and Deploy to Kubernetes via ArgoCD
+
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main] 
+#   workflow_dispatch:
+
+# jobs:
+#   build-and-publish:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+#       packages: write
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Log in to GitHub Container Registry
+#         uses: docker/login-action@v3
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }} 
+
+#       - name: Build Docker image
+#         run: |
+#           docker build -t ghcr.io/${{ github.repository_owner }}/nginx-app:${{ github.sha }} .
+
+#       - name: Push Docker image
+#         run: |
+#           docker push ghcr.io/${{ github.repository_owner }}/nginx-app:${{ github.sha }}
+
+#       - name: Set image tag variable
+#         id: vars
+#         run: |
+#           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
+  
+  # deploy:
+  #   needs: build-and-publish
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - env: dev
+  #           app_name: nginx-app-dev
+  #         - env: staging
+  #           app_name: nginx-app-staging
+  #         - env: prod
+  #           app_name: nginx-app-prod
+  #   steps:
+  #     # Checkout code
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     # Set Helm values file path for this environment
+  #     - name: Set HELM_VALUES_PATH
+  #       run: |
+  #         echo "HELM_VALUES_PATH=argocd/${{ matrix.env }}/values.yaml" >> $GITHUB_ENV
+
+  #     # Update image tag and environment in values.yaml
+  #     - name: Update values.yaml
+  #       run: |
+  #         sed -i "s|tag:.*|tag: ${{ github.sha }}|" $HELM_VALUES_PATH
+
+  #     # Commit changes back to Git
+  #     - name: Commit changes
+  #       run: |
+  #         git config user.name "github-actions[bot]"
+  #         git config user.email "github-actions[bot]@users.noreply.github.com"
+  #         git add $HELM_VALUES_PATH
+  #         git commit -m "Update image tag for ${{ matrix.env }} [skip ci]" || echo "No changes to commit"
+  #         git push
+
+      # Sync ArgoCD Application
+      # - name: Sync ArgoCD app
+      #   env:
+      #     ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+      #     ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+      #   run: |
+      #     curl -k -H "Authorization: Bearer $ARGOCD_AUTH_TOKEN" \
+      #       -X POST "$ARGOCD_SERVER/api/v1/applications/${{ matrix.app_name }}/sync"
+
+  

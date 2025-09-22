@@ -1,0 +1,13 @@
+image:
+  repository: ghcr.io/samaddico/nginx-app
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "def134e45534f1f81a1ae75c14df24a67d087ac0"
+
+nameOverride: "nginx-app"
+
+service:
+  type: NodePort
+  targetPort: 80
+  port: 80
+  nodePort: 30082

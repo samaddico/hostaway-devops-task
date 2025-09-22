@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/samaddico/nginx-app
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: b66460fcb1a63417d8d08af28e89cc42c2d5ceb0
+
+nameOverride: "nginx-app"
+fullnameOverride: ""
+
+
+service:
+  type: NodePort
+  targetPort: 80
+  port: 80
+  nodePort: 30081
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+

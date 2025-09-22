@@ -53,8 +53,12 @@ make up
 | Pod Ready          | < 1 pod   | Nginx app must be running                           |
 | Pod Restarts       | > 3/day   | Indicates crashing or instability                   |
 | HTTP 200 Rate      | < 95%     | Ensures clients receive responses                   |
+| HTTP 500 Rate      | > 5%      | Ensure errors afe found early before it escalates   |
 | Deployment Sync    | Any drift | ArgoCD drift alerts for config/manifest changes     |
 | Resource Usage     | >80% CPU  | Prevent cluster resource exhaustion                 |
+| Latency            |           | High latency means slow upstreams, overloaded workers, or network issues.                 |
+| Total requests                    Helps you measure load and detect traffic anomalies
+| 
 
-**Alerting**: Use [Prometheus](https://prometheus.io/) + [Alertmanager](https://github.com/prometheus/alertmanager)  
+**Alerting**: Use Prometheus and Alertmanager
 Thresholds can be defined in Prometheus rules, e.g. Pod restarts >3 in 24h, CPU >80%.

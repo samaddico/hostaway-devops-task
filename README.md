@@ -22,6 +22,12 @@ make up
 - Install ArgoCD with Helm
 - Deploy the sample Nginx app via ArgoCD for 3 environments: Dev, Staging, Prod.
 
+## Access ArgoCD UI
+`minikube service argocd -n argocd` 
+**username**: `admin`
+**password**: ` kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
+
+
 ## GitOps via ArgoCD
 
 - This setup uses a docker image of the html app. To promoto to staging/prod. you'd typically update the image tag in the values.yaml file and commit the changes. 
